@@ -9,23 +9,21 @@ public class Enemy : MonoBehaviour
     [SerializeField] private List<Transform> wayPoints;
     private AIDestinationSetter destinationSetter;
     private AIPath path;
-    private Seeker seeker;
     private Transform currentWayPoint;
-    private Transform oldWayPoint;
     private bool transitioning;
+    private Animator animator;
+    private int facingDirection = 1;
 
     private void Start()
     {
         path = GetComponent<AIPath>();
         destinationSetter = GetComponent<AIDestinationSetter>();
-        seeker = GetComponent<Seeker>();
+        animator = GetComponent<Animator>();
         GenerateNewPath();
     }
 
     private void GenerateNewPath()
     {
-        print("Generating");
-        oldWayPoint = currentWayPoint;
         List<Transform> nonUsedWayPoints = new List<Transform>();
         foreach (Transform waypoint in wayPoints)
         {
@@ -50,8 +48,36 @@ public class Enemy : MonoBehaviour
         if(path.remainingDistance <= 0.1f && !transitioning)
         {
             transitioning = true;
-            print("reached");
             GenerateNewPath();
         }    
+
+        if (Mathf.Abs(path.velocity.x) > Mathf.Abs(path.desiredVelocity.y))
+        {
+            animator.SetBool("side", true);
+            if (path.velocity.x > 0)
+            {
+                if (facingDirection < 0)
+                {
+                    Flip();
+                }
+            }
+            else if (path.desiredVelocity.x < 0)
+            {
+                if (facingDirection > 0)
+                {
+                    Flip();
+                }
+            }
+        }
+        else
+        {
+            animator.SetBool("side", false);
+        }
+    }
+
+    private void Flip()
+    {
+        facingDirection *= -1;
+        transform.Rotate(0, 180, 0);
     }
 }

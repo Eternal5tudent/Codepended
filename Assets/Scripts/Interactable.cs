@@ -2,28 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class Interactable : MonoBehaviour
 {
     protected bool interacted;
-    [SerializeField] private string text;
-    private List<GameObject> deleteOnStopInteraction = new List<GameObject>();
+    protected List<GameObject> deleteOnStopInteraction = new List<GameObject>();
+    protected PlayerController player;
 
-    public void Interact()
+    public bool TryInteract(PlayerController player)
     {
         if (!interacted)
         {
-            interacted = true;
-            GameObject textBox = WorldCanvas.Instance.CreateTextElement(text, transform.position);
-            deleteOnStopInteraction.Add(textBox);
+            this.player = player;
+            Interact();
+            return true;
         }
+        return false;
     }
 
-    public void StopInteraction()
+    protected virtual void Interact()
     {
-        foreach (GameObject gameObj in deleteOnStopInteraction)
-        {
-            Destroy(gameObj);
-        }
+        interacted = true;
+    }
+
+    protected virtual void StopInteraction()
+    {
         interacted = false;
+    }
+
+    public bool TryStopInteraction(PlayerController player)
+    {
+        if (interacted)
+        {
+            this.player = player;
+            StopInteraction();
+            return false;
+        }
+        return true;
     }
 }

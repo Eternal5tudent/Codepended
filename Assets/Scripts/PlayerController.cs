@@ -10,15 +10,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerType playerType;
 
     private InputManager inputManager;
+    private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
     private Animator animator;
     private Interactable collidingInteractable;
     private int lookDirection = 1;
+    private bool isHiding;
+    private bool currentlyInteracting;
+    private Vector3 positionBeforeHiding;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -32,9 +37,12 @@ public class PlayerController : MonoBehaviour
         {
             if (inputManager.Interact_L)
             {
-                if (collidingInteractable != null)
+                if (collidingInteractable != null )
                 {
-                    collidingInteractable.Interact();
+                    if (!currentlyInteracting)
+                        currentlyInteracting = collidingInteractable.TryInteract(this);
+                    else
+                        currentlyInteracting = collidingInteractable.TryStopInteraction(this);
                 }
             }
         }
@@ -44,7 +52,10 @@ public class PlayerController : MonoBehaviour
             {
                 if (collidingInteractable != null)
                 {
-                    collidingInteractable.Interact();
+                    if (!currentlyInteracting)
+                        currentlyInteracting = collidingInteractable.TryInteract(this);
+                    else
+                        currentlyInteracting = collidingInteractable.TryStopInteraction(this);
                 }
             }
         }
@@ -64,8 +75,15 @@ public class PlayerController : MonoBehaviour
 
     private void Move(Vector2 direction)
     {
+        // a state machine would be really useful here :(
+        if (isHiding)
+            return;
+
         direction.Normalize();
-        animator.SetInteger("speed", Mathf.RoundToInt(direction.magnitude));
+        if (Mathf.Abs(rb.velocity.x) > Mathf.Abs(rb.velocity.y))
+            animator.SetBool("side", true);
+        else if(Mathf.Abs(rb.velocity.x) < Mathf.Abs(rb.velocity.y))
+            animator.SetBool("side", false);
         if (lookDirection > 0)
         {
             if (direction.x < 0)
@@ -96,7 +114,6 @@ public class PlayerController : MonoBehaviour
             Interactable interactable = collision.GetComponent<Interactable>();
             if (interactable != null)
             {
-                Debug.Log("time to interact");
                 collidingInteractable = interactable;
             }
         }
@@ -109,10 +126,34 @@ public class PlayerController : MonoBehaviour
             Interactable interactable = collision.GetComponent<Interactable>();
             if (interactable == collidingInteractable)
             {
-                Debug.Log("can't interact no more");
-                collidingInteractable.StopInteraction();
+                collidingInteractable.TryStopInteraction(this);
                 collidingInteractable = null;
             }
         }
     }
+
+    public void Hide(Vector3 hidePos)
+    {
+        if (!isHiding)
+        {
+            spriteRenderer.enabled = false;
+            rb.velocity = Vector2.zero;
+            positionBeforeHiding = transform.position;
+            isHiding = true;
+            transform.position = hidePos;
+            Debug.Log("shhhh, I'm hiding");
+        }
+    }
+
+    public void UnHide()
+    {
+        if (isHiding)
+        {
+            spriteRenderer.enabled = true;
+            isHiding = false;
+            transform.position = positionBeforeHiding;
+            Debug.Log("I ain't hiding anymore");
+        }
+    }
+
 }
