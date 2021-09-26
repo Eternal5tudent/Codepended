@@ -6,7 +6,8 @@ using UnityEngine;
 public class HidingSpot : Interactable
 {
     [SerializeField] Sprite defaultSprite;
-    [SerializeField] Sprite interactedSprite;
+    [SerializeField] Sprite interactedSprite_LeftPlayer;
+    [SerializeField] Sprite interactedSprite_RightPlayer;
     private SpriteRenderer spriteRenderer;
 
     private void Awake()
@@ -17,7 +18,10 @@ public class HidingSpot : Interactable
     protected override void Interact()
     {
         base.Interact();
-        spriteRenderer.sprite = interactedSprite;
+        if(player.Type == PlayerController.PlayerType.Left)
+            spriteRenderer.sprite = interactedSprite_LeftPlayer;
+        else
+            spriteRenderer.sprite = interactedSprite_RightPlayer;
         player.Hide(transform.position);
     }
 

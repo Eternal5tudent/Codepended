@@ -7,12 +7,14 @@ using System.Collections;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private List<Transform> wayPoints;
+    [SerializeField] private ParticleSystem attackParticles;
     private AIDestinationSetter destinationSetter;
     private AIPath path;
     private Transform currentWayPoint;
     private bool transitioning;
     private Animator animator;
     private int facingDirection = 1;
+    private PlayerController player;
 
     private void Start()
     {
@@ -79,5 +81,27 @@ public class Enemy : MonoBehaviour
     {
         facingDirection *= -1;
         transform.Rotate(0, 180, 0);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            player = collision.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                bool canAttack = !player.IsHiding && !player.IsDead;
+                if (canAttack)
+                {
+                    animator.SetTrigger("attack");
+                }
+            }
+        }
+    }
+
+    public void KillPlayer()
+    {
+        player.Die();
+        attackParticles.Play();
     }
 }

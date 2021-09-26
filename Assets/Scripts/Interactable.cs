@@ -36,8 +36,8 @@ public class Interactable : MonoBehaviour
         {
             this.player = player;
             StopInteraction();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }

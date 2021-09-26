@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private enum PlayerType { Left, Right }
+    public enum PlayerType { Left, Right }
 
     [SerializeField] private float movementSpeed;
     [SerializeField] private PlayerType playerType;
+    public PlayerType Type { get { return playerType; } }
 
     private InputManager inputManager;
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
     private Animator animator;
-    private Interactable collidingInteractable;
     private int lookDirection = 1;
-    private bool isHiding;
-    private bool currentlyInteracting;
     private Vector3 positionBeforeHiding;
+    public bool IsHiding { get; private set; }
+    public bool IsDead { get; private set; }
+
+    private Interactable collidingInteractable;
+    private Interactable currentInteractable;
 
     private void Awake()
     {
@@ -33,36 +36,51 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (IsDead)
+            return;
         if (playerType == PlayerType.Left)
         {
             if (inputManager.Interact_L)
             {
-                if (collidingInteractable != null )
-                {
-                    if (!currentlyInteracting)
-                        currentlyInteracting = collidingInteractable.TryInteract(this);
-                    else
-                        currentlyInteracting = collidingInteractable.TryStopInteraction(this);
-                }
+                InteractWithObject();
             }
         }
         else
         {
             if (inputManager.Interact_R)
             {
-                if (collidingInteractable != null)
-                {
-                    if (!currentlyInteracting)
-                        currentlyInteracting = collidingInteractable.TryInteract(this);
-                    else
-                        currentlyInteracting = collidingInteractable.TryStopInteraction(this);
-                }
+                InteractWithObject();
+            }
+        }
+    }
+
+    private void InteractWithObject()
+    {
+        if (IsDead)
+            return;
+        Interactable collidingInteractable = this.collidingInteractable;
+        if (currentInteractable == null && collidingInteractable != null) //if not currently interacting with anything
+        {
+            bool interactionSuccessful = collidingInteractable.TryInteract(this);
+            if (interactionSuccessful)
+            {
+                currentInteractable = collidingInteractable;
+            }
+        }
+        else if(currentInteractable != null)
+        {
+            bool stopInteractionSuccessful = currentInteractable.TryStopInteraction(this);
+            if (stopInteractionSuccessful)
+            {
+                currentInteractable = null;
             }
         }
     }
 
     private void FixedUpdate()
     {
+        if (IsDead)
+            return;
         if (playerType == PlayerType.Left)
         {
             Move(inputManager.AxisInput_L);
@@ -75,14 +93,16 @@ public class PlayerController : MonoBehaviour
 
     private void Move(Vector2 direction)
     {
-        // a state machine would be really useful here :(
-        if (isHiding)
+        if (IsDead)
+            return;
+        // a state machine would be really useful here :( //
+        if (IsHiding)
             return;
 
         direction.Normalize();
         if (Mathf.Abs(rb.velocity.x) > Mathf.Abs(rb.velocity.y))
             animator.SetBool("side", true);
-        else if(Mathf.Abs(rb.velocity.x) < Mathf.Abs(rb.velocity.y))
+        else if (Mathf.Abs(rb.velocity.x) < Mathf.Abs(rb.velocity.y))
             animator.SetBool("side", false);
         if (lookDirection > 0)
         {
@@ -109,37 +129,45 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (IsDead)
+            return;
         if (collision.CompareTag("Interactable"))
         {
             Interactable interactable = collision.GetComponent<Interactable>();
-            if (interactable != null)
-            {
-                collidingInteractable = interactable;
-            }
+            collidingInteractable = interactable;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (IsDead)
+            return;
         if (collision.CompareTag("Interactable"))
         {
             Interactable interactable = collision.GetComponent<Interactable>();
             if (interactable == collidingInteractable)
             {
-                collidingInteractable.TryStopInteraction(this);
                 collidingInteractable = null;
+            }
+            if (currentInteractable == interactable)
+            {
+                bool stopInteractionSuccessful = currentInteractable.TryStopInteraction(this);
+                if (stopInteractionSuccessful)
+                {
+                    currentInteractable = null;
+                }
             }
         }
     }
 
     public void Hide(Vector3 hidePos)
     {
-        if (!isHiding)
+        if (!IsHiding)
         {
             spriteRenderer.enabled = false;
             rb.velocity = Vector2.zero;
             positionBeforeHiding = transform.position;
-            isHiding = true;
+            IsHiding = true;
             transform.position = hidePos;
             Debug.Log("shhhh, I'm hiding");
         }
@@ -147,13 +175,25 @@ public class PlayerController : MonoBehaviour
 
     public void UnHide()
     {
-        if (isHiding)
+        if (IsHiding)
         {
             spriteRenderer.enabled = true;
-            isHiding = false;
+            IsHiding = false;
             transform.position = positionBeforeHiding;
             Debug.Log("I ain't hiding anymore");
         }
     }
 
+    public void Die()
+    {
+        if (IsDead)
+            return;
+        rb.velocity = Vector2.zero;
+        animator.SetTrigger("die");
+        if(currentInteractable != null)
+        {
+            currentInteractable.TryStopInteraction(this);
+        }
+        IsDead = true;
+    }
 }
