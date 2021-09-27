@@ -138,6 +138,10 @@ public class PlayerController : MonoBehaviour
             Interactable interactable = collision.GetComponent<Interactable>();
             collidingInteractable = interactable;
         }
+        if (collision.CompareTag("Player"))
+        {
+            GameController.Instance.GameWon();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -160,6 +164,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        
     }
 
     public void Hide(Vector3 hidePos)
@@ -190,6 +195,7 @@ public class PlayerController : MonoBehaviour
     {
         if (IsDead)
             return;
+        AudioManager.Instance.PlaySFX(deathSFX);
         rb.velocity = Vector2.zero;
         animator.SetTrigger("die");
         if(currentInteractable != null)
@@ -197,6 +203,7 @@ public class PlayerController : MonoBehaviour
             currentInteractable.TryStopInteraction(this);
         }
         IsDead = true;
+        GameController.Instance.GameOver();
     }
 
     public void PlayFootstepSFX()

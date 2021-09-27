@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class GameController : Singleton<GameController>
 {
+    [SerializeField] AudioClip gameWonSound;
     public void ChangeScene(string sceneName)
     {
+        UnPauseGame();
         SceneManager.LoadSceneAsync(sceneName);
     }
 
@@ -24,8 +26,22 @@ public class GameController : Singleton<GameController>
     {
         IEnumerator GameOver_Cor()
         {
+            UI_Manager.Instance.UnpauseGame();
+            UI_Manager.Instance.HidePauseButton();
             yield return new WaitForSeconds(1.5f);
+            PauseGame();
+            UI_Manager.Instance.ShowDefeatScreen();
         }
+        StartCoroutine(GameOver_Cor());
+    }
+
+    public void GameWon()
+    {
+        AudioManager.Instance.PlaySFX(gameWonSound);
+        UI_Manager.Instance.UnpauseGame();
+        PauseGame();
+        UI_Manager.Instance.HidePauseButton();
+        UI_Manager.Instance.ShowVictoryScreen();
     }
 
 

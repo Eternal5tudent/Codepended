@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Singleton<AudioManager>
 {
     [SerializeField] AudioSource musicSource;
     public AudioClip buttonClicksound;
@@ -16,7 +16,6 @@ public class AudioManager : MonoBehaviour
             this.gameObj = gameObj;
         }
     }
-    public static AudioManager Instance { get; private set; }
     private enum AudioType { Music, SFX, SFXLooped }
 
     #region Variables
@@ -31,11 +30,7 @@ public class AudioManager : MonoBehaviour
     private readonly Dictionary<int, AudioPlayer> playingLoopedSFX = new Dictionary<int, AudioPlayer>();
     List<int> uniqueAudioIdUsed = new List<int>();
     #endregion
-    private void Awake()
-    {
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
+
     private void Start()
     {
         for (int i = 0; i < 5; i++)

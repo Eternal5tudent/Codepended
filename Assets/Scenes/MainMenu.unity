@@ -228,6 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 359cfd5b5a1e60345b1fb735be217a3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  persistBetweenScenes: 1
   musicSource: {fileID: 309592999}
   buttonClicksound: {fileID: 8300000, guid: a936701e6c2c6c24581c9efdd5e0343a, type: 3}
   sfxPlayer: {fileID: 8086340423186369740, guid: ef4b4ba33b73ffc4a9a1d9dc3ace8b98, type: 3}
@@ -540,6 +541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   persistBetweenScenes: 1
+  gameWonSound: {fileID: 8300000, guid: 0ee73bacef20d8c46b7c40d0a7a47d0d, type: 3}
 --- !u!4 &1082139998
 Transform:
   m_ObjectHideFlags: 0
@@ -694,6 +696,7 @@ GameObject:
   - component: {fileID: 1751075677}
   - component: {fileID: 1751075676}
   - component: {fileID: 1751075679}
+  - component: {fileID: 1751075680}
   m_Layer: 5
   m_Name: StartGame
   m_TagString: Untagged
@@ -765,16 +768,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1082139997}
-        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: ChangeScene
-        m_Mode: 5
+      - m_Target: {fileID: 1751075680}
+        m_TargetAssemblyTypeName: StartGameButton, Assembly-CSharp
+        m_MethodName: LoadGame
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Game
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1751075677
@@ -825,6 +828,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2c71d41a1b53cf45ba29705d007f2ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1751075680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751075674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3279cf8fd3fb1f04ea651da90fc8fd4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1921623009
