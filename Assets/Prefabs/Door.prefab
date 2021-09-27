@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6313318625126352273}
   - component: {fileID: 6909907706784875173}
   - component: {fileID: 7170821813934249709}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,6 +232,10 @@ PrefabInstance:
     - target: {fileID: 5612808892746811199, guid: 7ade7bad4dce15547a314b4274929084, type: 3}
       propertyPath: m_Name
       value: Numpad
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612808892746811199, guid: 7ade7bad4dce15547a314b4274929084, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5612808892746811199, guid: 7ade7bad4dce15547a314b4274929084, type: 3}
       propertyPath: m_IsActive

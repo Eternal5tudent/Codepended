@@ -8,10 +8,13 @@ public class Numberpad : Interactable
     [SerializeField] int code;
     [SerializeField] AudioClip codeRejectedSound;
     [SerializeField] AudioClip doorOpeningSound;
+    private bool canInteract = true;
 
     protected override void Interact()
     {
         base.Interact();
+        if (!canInteract)
+            return;
         if (player.Type == PlayerController.PlayerType.Left)
         {
             UI_Manager.Instance.LeftNumberPad.Open(this);
@@ -51,6 +54,7 @@ public class Numberpad : Interactable
     public void OpenDoor()
     {
         door.Open();
+        canInteract = false;
         AudioManager.Instance.PlaySFX(doorOpeningSound);
     }
 

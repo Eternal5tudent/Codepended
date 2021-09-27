@@ -35,7 +35,12 @@ public class Enemy : MonoBehaviour
                 nonUsedWayPoints.Add(waypoint);
             }
         }
+        if (nonUsedWayPoints.Count <= 0)
+        {
+            return;
+        }
         int Randnum = UnityEngine.Random.Range(0, nonUsedWayPoints.Count);
+        
         currentWayPoint = nonUsedWayPoints[Randnum];
         destinationSetter.target = currentWayPoint;
         IEnumerator SetTransitioning_Cor()

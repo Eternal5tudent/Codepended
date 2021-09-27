@@ -4985,12 +4985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe43610d8d9c4a54dad158a882ce921f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wayPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  wayPoints: []
   attackParticles: {fileID: 1487542578014711733}
   attackScream: {fileID: 8300000, guid: 668dc73ce0eca5d4ebd1e691d884d09e, type: 3}
 --- !u!114 &3204060056940467404
@@ -5053,7 +5048,7 @@ MonoBehaviour:
   repathRate: 0.5
   canSearch: 1
   canMove: 1
-  maxSpeed: 1
+  maxSpeed: 2
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
@@ -5105,4 +5100,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.76596045
+  m_Radius: 0.5921401
