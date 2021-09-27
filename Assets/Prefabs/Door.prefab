@@ -245,6 +245,14 @@ PrefabInstance:
       propertyPath: door
       value: 
       objectReference: {fileID: 6909907706784875173}
+    - target: {fileID: 8900962358271805580, guid: 7ade7bad4dce15547a314b4274929084, type: 3}
+      propertyPath: doorOpeningSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 07af8e27b5fa95143beecaa6b8a07f56, type: 3}
+    - target: {fileID: 8900962358271805580, guid: 7ade7bad4dce15547a314b4274929084, type: 3}
+      propertyPath: codeRejectedSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 7e263e27f187348469e7a3a2ab65955d, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ade7bad4dce15547a314b4274929084, type: 3}
 --- !u!1 &7410735215967273192 stripped

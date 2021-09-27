@@ -4992,6 +4992,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   attackParticles: {fileID: 1487542578014711733}
+  attackScream: {fileID: 8300000, guid: 668dc73ce0eca5d4ebd1e691d884d09e, type: 3}
 --- !u!114 &3204060056940467404
 MonoBehaviour:
   m_ObjectHideFlags: 0

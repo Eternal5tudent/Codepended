@@ -777,6 +777,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 4352373086165588888}
+  dialpadSFX: {fileID: 8300000, guid: 99b9ae6af69e48042a3b7e36e28a1961, type: 3}
   connectedNumberPad: {fileID: 0}
 --- !u!1 &885648542449942536
 GameObject:

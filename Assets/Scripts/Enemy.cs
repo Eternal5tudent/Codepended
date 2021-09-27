@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private List<Transform> wayPoints;
     [SerializeField] private ParticleSystem attackParticles;
+    [SerializeField] private AudioClip attackScream;
     private AIDestinationSetter destinationSetter;
     private AIPath path;
     private Transform currentWayPoint;
@@ -93,6 +94,7 @@ public class Enemy : MonoBehaviour
                 bool canAttack = !player.IsHiding && !player.IsDead;
                 if (canAttack)
                 {
+                    AudioManager.Instance.PlaySFX(attackScream);
                     animator.SetTrigger("attack");
                 }
             }

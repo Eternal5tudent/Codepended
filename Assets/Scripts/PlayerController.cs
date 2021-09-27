@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public enum PlayerType { Left, Right }
-
+    [SerializeField] AudioClip footstepSFX;
+    [SerializeField] AudioClip deathSFX;
     [SerializeField] private float movementSpeed;
     [SerializeField] private PlayerType playerType;
     public PlayerType Type { get { return playerType; } }
@@ -104,6 +105,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("side", true);
         else if (Mathf.Abs(rb.velocity.x) < Mathf.Abs(rb.velocity.y))
             animator.SetBool("side", false);
+        animator.SetFloat("speedY", rb.velocity.y);
         if (lookDirection > 0)
         {
             if (direction.x < 0)
@@ -195,5 +197,16 @@ public class PlayerController : MonoBehaviour
             currentInteractable.TryStopInteraction(this);
         }
         IsDead = true;
+    }
+
+    public void PlayFootstepSFX()
+    {
+        if(rb.velocity.magnitude > 0)
+            AudioManager.Instance.PlaySFX(footstepSFX);
+    }
+
+    public void PlayDeathSFX()
+    {
+        AudioManager.Instance.PlaySFX(deathSFX);
     }
 }

@@ -98,6 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24a60c4e9e58618418bec0ce310b624b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  footstepSFX: {fileID: 8300000, guid: 411c8c46ef321084c80a68594c4ca8f2, type: 3}
+  deathSFX: {fileID: 8300000, guid: 79a0346d3e718324d8f7c3b6087464dc, type: 3}
   movementSpeed: 3
   playerType: 0
 --- !u!50 &7909643965125619708

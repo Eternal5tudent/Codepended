@@ -6,6 +6,8 @@ using TMPro;
 public class UI_Numberpad : MonoBehaviour
 {
     [SerializeField] private TMP_Text input;
+    [SerializeField] AudioClip dialpadSFX;
+
     public Numberpad connectedNumberPad;
     private int typedInput;
     public void Open(Numberpad numberpad)
@@ -36,7 +38,10 @@ public class UI_Numberpad : MonoBehaviour
 
     public void TypeNumber(string num)
     {
-        if(input.text.Length < 4)
+        if (input.text.Length < 4)
+        {
             input.text += num;
+            AudioManager.Instance.PlaySFX(dialpadSFX);
+        }
     }
 }

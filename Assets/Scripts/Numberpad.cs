@@ -6,6 +6,8 @@ public class Numberpad : Interactable
 {
     [SerializeField] Door door;
     [SerializeField] int code;
+    [SerializeField] AudioClip codeRejectedSound;
+    [SerializeField] AudioClip doorOpeningSound;
 
     protected override void Interact()
     {
@@ -49,10 +51,11 @@ public class Numberpad : Interactable
     public void OpenDoor()
     {
         door.Open();
+        AudioManager.Instance.PlaySFX(doorOpeningSound);
     }
 
     public void RejectCode()
     {
-        //todo: play reject sound
+        AudioManager.Instance.PlaySFX(codeRejectedSound);
     }
 }
